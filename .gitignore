@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+build/
+dist/
+db/dev.db
+logs/log_info.csv
+logs/log_requests.csv
+logs/log_errors.log
+logs/log_frontend.log
+secret_key_jwt.txt
+images/
+config.txt
+config_dev.txt
