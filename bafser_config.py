@@ -1,5 +1,5 @@
 db_dev_path = "db/dev.db"
-db_path = "username:UR2hqJDbSfQ@username.mysql.pythonanywhere-services.com/username$default"
+db_path = "questbot:UR2hqJDbSfQ@questbot.mysql.pythonanywhere-services.com/questbot$default"
 # db_path = "ENV:DBPATH"
 db_mysql = True
 sql_echo = False
