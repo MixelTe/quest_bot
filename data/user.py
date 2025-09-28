@@ -3,7 +3,7 @@ import json
 from bafser import Log
 from bafser_tgapi import TgUserBase
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, Session, mapped_column
 
 from data import Roles
 
@@ -24,6 +24,10 @@ class User(TgUserBase):
 
     def get_state(self) -> tuple[str, "sargs"]:
         return self.state, sargs(self.state_args)
+
+    @staticmethod
+    def get_all_players(db_sess: Session):
+        return User.query(db_sess).filter((User.state != "") & (User.state != "banned"))
 
 
 class sargs:

@@ -1,8 +1,8 @@
 import bafser_tgapi as tgapi
 from bafser import Undefined
-from flask import url_for
 
 from bot.bot import Bot
+from bot.control import forward
 from bot.story import answer_story
 from utils import reply_markup
 
@@ -44,7 +44,7 @@ def task_hint(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
             hint = "слайм"
         case "task3":
             if len(args) > 0 and args[0] == "1":
-                bot.sendPhoto(tgapi.url_for("img.img", fname="task3_hint.jpg"), caption="Подсказка 2")
+                forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task3_hint.jpg"), caption="Подсказка 2"))
             else:
                 p1 = "Подсказка 1:\n"
                 p2 = """
@@ -54,22 +54,22 @@ def task_hint(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
 Бросается рыцарь в огонь!
 """.strip()
                 txt = p1 + p2
-                bot.sendMessage(txt, entities=[ME.blockquote(ME.len(p1), ME.len(p2))])
+                forward(bot.sendMessage(txt, entities=[ME.blockquote(ME.len(p1), ME.len(p2))]))
                 edit_hint_btns(bot, 2)
         case "task4":
-            bot.sendPhoto(tgapi.url_for("img.img", fname="task4_hint.jpg"), caption="Подсказка")
+            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task4_hint.jpg"), caption="Подсказка"))
         case "task5":
-            bot.sendPhoto(tgapi.url_for("img.img", fname="task5_hint.jpg"), caption="Подсказка")
+            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task5_hint.jpg"), caption="Подсказка"))
         case "task6":
-            bot.sendPhoto(tgapi.url_for("img.img", fname="task6_hint.jpg"), caption="Подсказка")
+            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task6_hint.jpg"), caption="Подсказка"))
         case "task7":
-            bot.sendPhoto(tgapi.url_for("img.img", fname="task7_hint.jpg"), caption="Подсказка")
+            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task7_hint.jpg"), caption="Подсказка"))
         case "task8":
             if len(args) > 0 and args[0] == "1":
                 hintI = " 2"
                 hint = "озон"
             else:
-                bot.sendMessage("Подсказка 1:\n4 латинских буквы")
+                forward(bot.sendMessage("Подсказка 1:\n4 латинских буквы"))
                 edit_hint_btns(bot, 2)
         case "task9":
             hint = "ха! а нету подсказки)"
@@ -77,7 +77,7 @@ def task_hint(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
             hint = "ха! а нету подсказки)"
 
     if hint:
-        bot.sendMessage(f"Подсказка{hintI}:\n" + hint)
+        forward(bot.sendMessage(f"Подсказка{hintI}:\n" + hint))
 
 
 def edit_hint_btns(bot: Bot, count: int):

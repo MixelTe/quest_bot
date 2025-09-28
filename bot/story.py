@@ -5,6 +5,7 @@ from typing import Callable
 import bafser_tgapi as tgapi
 
 from bot.bot import Bot
+from bot.control import forward
 from data.user import User
 from utils import clear_input, reply_markup
 
@@ -20,7 +21,7 @@ def answer_story(bot: Bot):
     if fn:
         fn(bot, bot.user)
     else:
-        bot.sendMessage("ВЕЛИКА ОЩИБКА!")
+        forward(bot.sendMessage("ВЕЛИКА ОЩИБКА!"))
 
 
 def story_part(fn: tfn):
@@ -34,7 +35,7 @@ def started(bot: Bot, user: User):
     if args[0] == 1:
         return
     user.set_state(state, [1])
-    for msg in [
+    for text in [
         "Хай\\!",
         "Вот вам мой *Ультиматум*\\!!!",
         "Я вас пробил по айпи",
@@ -44,21 +45,21 @@ def started(bot: Bot, user: User):
         "Следуйте за вопросами, находите ответы и трепещите от страха 🤪",
     ]:
         bot.sendChatAction("typing")
-        st = len(msg) * 0.015 - 0.5
+        st = len(text) * 0.015 - 0.5
         if st > 0:
-            sleep(len(msg) * 0.015)
-        bot.sendMessage(msg, use_markdown=True)
+            sleep(len(text) * 0.015)
+        forward(bot.sendMessage(text, use_markdown=True))
     bot.sendChatAction("choose_sticker")
     sleep(1)
-    bot.sendSticker("CAACAgEAAxUAAWjZGdMrUNNR5rRbAsVXv_X_xpZ-AAKCAgAC1jEpR2is5WGi39g8NgQ")
+    forward(bot.sendSticker("CAACAgEAAxUAAWjZGdMrUNNR5rRbAsVXv_X_xpZ-AAKCAgAC1jEpR2is5WGi39g8NgQ"))
     sleep(10)
     bot.sendChatAction("typing")
     sleep(5)
     bot.sendChatAction("typing")
     sleep(5)
-    msg = "Ребята, пока Грифер пошел наливать себе чай я пробрался к его компу и умоляю мне помочь! Я и есть тот самый заложник! Куда меня спрятали, я не знаю, слышал только обрывки фраз. Идите по нашим следам. Буду высылать их приметы. Спасите! Помогите!"  # noqa E501
+    text = "Ребята, пока Грифер пошел наливать себе чай я пробрался к его компу и умоляю мне помочь! Я и есть тот самый заложник! Куда меня спрятали, я не знаю, слышал только обрывки фраз. Идите по нашим следам. Буду высылать их приметы. Спасите! Помогите!"  # noqa E501
     user.set_state("task1")
-    bot.sendMessage(msg, reply_markup=reply_markup([("Вперёд!", "start_quest")]))
+    forward(bot.sendMessage(text, reply_markup=reply_markup([("Вперёд!", "start_quest")])))
 
 
 @story_part
@@ -96,7 +97,8 @@ def task3(bot: Bot, user: User):
 @story_part
 def task4(bot: Bot, user: User):
     task = "А вы заметили, во сколько завтракает Сытый лис?"
-    answers = ("8.00", "8:00", "8 00", "08.00", "08:00", "08 00", "в восемь часов", "восемь часов", "в восемь", "в 8 часов", "8 часов")
+    answers = ("8.00", "8:00", "8 00", "8-00", "08.00", "08:00", "08 00", "08-00",
+               "в восемь часов", "восемь часов", "в восемь", "в 8 часов", "8 часов")
     run_task(bot, user, task, answers, "task5")
 
 
@@ -154,8 +156,8 @@ def quest_end(bot: Bot, user: User):
         return
     user.set_state(state, [1])
     msg = "Ура, мне повезло! Здесь добрая фея с приметами мамы именинника, и она  заметила что-то подозрительное. Надеюсь, что скоро вы меня спасете! Мы поднимались по лестнице, кажется, на второй этаж."  # noqa E501
-    bot.sendMessage(msg)
-    bot.sendMessage("Осторожно, здание заминировано!")
+    forward(bot.sendMessage(msg))
+    forward(bot.sendMessage("Осторожно, здание заминировано!"))
 
 
 def run_task(bot: Bot, user: User, task: str, answers: tuple[str, ...] | Callable[[str], bool], next_state: str, *,
@@ -164,14 +166,14 @@ def run_task(bot: Bot, user: User, task: str, answers: tuple[str, ...] | Callabl
     if args[0] is None:
         user.set_state(state, [1])
         send_backvoice(bot)
-        bot.sendMessage(task, use_markdown=use_markdown, reply_markup=reply_markup([("Подсказка", "task_hint 0")]))
+        forward(bot.sendMessage(task, use_markdown=use_markdown, reply_markup=reply_markup([("Подсказка", "task_hint 0")])))
         return
     if not bot.message:
         return
     answer = clear_input(bot.message.text)
     if callable(answers) and answers(answer) or \
             isinstance(answers, tuple) and answer in answers:
-        bot.sendMessage("Верно!")
+        forward(bot.sendMessage("Верно!"))
         user.set_state(next_state)
         answer_story(bot)
     else:
@@ -182,15 +184,15 @@ def send_backvoice(bot: Bot):
     p1 = "Голос свыше:\n"
     p2 = "Убедись, что твои друзья рядом и слышат тебя."
     msg = p1 + p2
-    bot.sendMessage(msg, entities=[ME.italic(0, ME.len(p1)), ME.blockquote(ME.len(p1), ME.len(p2))])
+    forward(bot.sendMessage(msg, entities=[ME.italic(0, ME.len(p1)), ME.blockquote(ME.len(p1), ME.len(p2))]))
 
 
 def send_you_are_wrong(bot: Bot):
-    bot.sendMessage(choice([
+    forward(bot.sendMessage(choice([
         "Думаю, стоит подумать ещё", "Мимо!", "Не подходит", "Не угадал!", "Неа!", "Неверная догадка",
         "Неверно!", "Неверное решение", "Неправильный ответ!", "Нет, не то", "Нет, не угадал", "Нет, неверно",
         "Нет, это неправильный вариант", "Нет-нет-нет", "Ну же, подумай лучше!", "Ну нет, это не то",
         "Ну-ну, не то", "Ответ неверный", "Ошибочка!", "Подумай ещё!", "Пока неверно", "Попробуй ещё вариант",
         "Попробуй иначе", "Попробуй по-другому", "Попробуй снова!", "Провал!", "Промах!", "Увы, неправильно",
         "Увы, нет!", "Увы, ошибка", "Что-то не похоже на ответ", "Это не то, что нужно", "Это ошибка",
-    ]))
+    ])))
