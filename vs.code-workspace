@@ -20,7 +20,10 @@
                 // "program": "${file}",
                 "program": "main.py",
                 "console": "integratedTerminal",
-                "args": ["dev"]
+                "args": [
+                    "dev",
+                    "devServer",
+                ]
             }
         ]
     }
