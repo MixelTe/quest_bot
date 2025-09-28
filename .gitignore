@@ -3,6 +3,7 @@ __pycache__/
 build/
 dist/
 db/dev.db
+logs/bot.csv
 logs/log_info.csv
 logs/log_requests.csv
 logs/log_errors.log
