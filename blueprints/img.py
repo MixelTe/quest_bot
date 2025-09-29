@@ -15,4 +15,9 @@ def img(fname: str):
         abort(404)
 
     path = os.path.join("imgs", fname)
-    return create_file_response(path, f"image/{m.group(1)}", fname)
+    itype = m.group(1)
+    if itype == "jpg":
+        itype = "jpeg"
+    elif itype == "svg":
+        itype = "svg+xml"
+    return create_file_response(path, f"image/{itype}", fname)
