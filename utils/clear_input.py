@@ -1,6 +1,6 @@
 import re
 
-reg1 = re.compile("[^0-9a-zA-Zа-яА-ЯёЁ \t\n\\.\\-]+")
+reg1 = re.compile("[^0-9a-zA-Zа-яА-ЯёЁ \t\n\\.\\-:]+")
 reg2 = re.compile("[ \t\n]+")
 
 

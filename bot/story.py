@@ -58,7 +58,6 @@ def started(bot: Bot, user: User):
     bot.sendChatAction("typing")
     sleep(5)
     text = "Ребята, пока Грифер пошел наливать себе чай я пробрался к его компу и умоляю мне помочь! Я и есть тот самый заложник! Куда меня спрятали, я не знаю, слышал только обрывки фраз. Идите по нашим следам. Буду высылать их приметы. Спасите! Помогите!"  # noqa E501
-    user.set_state("task1")
     forward(bot.sendMessage(text, reply_markup=reply_markup([("Вперёд!", "start_quest")])))
 
 

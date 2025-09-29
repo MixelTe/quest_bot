@@ -15,12 +15,16 @@ class User(TgUserBase):
     state_args: Mapped[str] = mapped_column(String(256), default="", init=False)
 
     def set_state(self, state: str, args: list[str | int | bool] = []):
+        from bot.control import on_state_update
+        old_state = self.state
         self.state = state
         self.state_args = json.dumps(args)
         Log.updated(self, self, [
             ("state", "", self.state),
             ("state_args", "", self.state_args),
         ])
+        if old_state != state:
+            on_state_update(self)
 
     def get_state(self) -> tuple[str, "sargs"]:
         return self.state, sargs(self.state_args)
