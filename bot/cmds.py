@@ -28,6 +28,9 @@ def start(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
 @Bot.cmd_connect_db
 def start_quest(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
     assert bot.user
+    if bot.user.state != "started":
+        return
+    bot.user.set_state("task1")
     answer_story(bot)
 
 
