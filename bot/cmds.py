@@ -14,7 +14,7 @@ ME = tgapi.MessageEntity
 def start(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
     assert bot.db_sess
     assert bot.user
-    if len(args) < 1 or args[0] != "theVerySecretStartCode":
+    if len(args) < 1 or args[0] != "verySecretStartCode":
         if not bot.user.state:
             bot.user.set_state("banned")
             return f"{bot.user.get_name()}?\nНе помню такого...\nВ бан тебя! 🤪"
