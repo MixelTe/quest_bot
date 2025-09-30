@@ -47,7 +47,7 @@ def task_hint(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
             hint = "слайм"
         case "task3":
             if len(args) > 0 and args[0] == "1":
-                forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task3_hint.jpg"), caption="Подсказка 2"))
+                sendPhoto(bot, "task3_hint.jpg", "Подсказка 2")
             else:
                 p1 = "Подсказка 1:\n"
                 p2 = """
@@ -60,13 +60,13 @@ def task_hint(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
                 forward(bot.sendMessage(txt, entities=[ME.blockquote(ME.len(p1), ME.len(p2))]))
                 edit_hint_btns(bot, 2)
         case "task4":
-            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task4_hint.jpg"), caption="Подсказка"))
+            sendPhoto(bot, "task4_hint.jpg", "Подсказка")
         case "task5":
-            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task5_hint.jpg"), caption="Подсказка"))
+            sendPhoto(bot, "task5_hint.jpg", "Подсказка")
         case "task6":
-            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task6_hint.jpg"), caption="Подсказка"))
+            sendPhoto(bot, "task6_hint.jpg", "Подсказка")
         case "task7":
-            forward(bot.sendPhoto(tgapi.url_for("img.img", fname="task7_hint.jpg"), caption="Подсказка"))
+            sendPhoto(bot, "task7_hint.jpg", "Подсказка")
         case "task8":
             if len(args) > 0 and args[0] == "1":
                 hintI = " 2"
@@ -89,3 +89,10 @@ def edit_hint_btns(bot: Bot, count: int):
                                      reply_markup=reply_markup([
                                          (f"Подсказка {i + 1}", f"task_hint {i}") for i in range(count)
                                      ]))
+
+
+def sendPhoto(bot: Bot, fname: str, caption: str):
+    ok, r = bot.sendPhoto(tgapi.url_for("img.img", fname=fname), caption=caption)
+    if not ok:
+        ok, r = bot.sendPhoto(tgapi.url_for("img.img", fname=fname, _double_slash=False), caption=caption)
+    forward((ok, r))
