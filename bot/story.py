@@ -43,7 +43,7 @@ def started(bot: Bot, user: User):
         "Ищите как хотите и трепещите от страха\\! Ха\\-ха\\! 🤪",
     ]:
         bot.sendChatAction("typing")
-        st = len(text) * 0.02 - 0.25
+        st = len(text) * 0.05 - 0.25
         if st > 0:
             sleep(st)
         forward(bot.sendMessage(text, use_markdown=True))
@@ -165,13 +165,13 @@ def quest_end(bot: Bot, user: User):
     forward(bot.sendMessage(msg))
 
     bot.sendChatAction("typing")
-    sleep(0.5)
+    sleep(2)
     msg = "Караул! Он заметил, что я вам помогаю! Зачем ему поршень? И откуда у него бедрок?"
     forward(bot.sendMessage(msg))
 
     sleep(1)
     bot.sendChatAction("typing")
-    sleep(0.5)
+    sleep(5)
     msg = "Ха-ха-ха! Этот мерзкий тип вам подсказывал, и за это я засунул его прямо в бедрок. 🤣 И теперь здание заминиро"
     forward(bot.sendMessage(msg))
 
@@ -182,6 +182,8 @@ def run_task(bot: Bot, user: User, task: str, answers: tuple[str, ...] | Callabl
     if args[0] is None:
         user.set_state(state, [1])
         send_backvoice(bot)
+        bot.sendChatAction("typing")
+        sleep(2)
         forward(bot.sendMessage(task, use_markdown=use_markdown, reply_markup=reply_markup([("Подсказка", "task_hint 0")])))
         return
     if not bot.message:
@@ -191,8 +193,9 @@ def run_task(bot: Bot, user: User, task: str, answers: tuple[str, ...] | Callabl
             isinstance(answers, tuple) and answer in answers:
         for msg in ok_phrase:
             bot.sendChatAction("typing")
-            sleep(0.25)
+            sleep(2)
             forward(bot.sendMessage(msg))
+            sleep(4)
         user.set_state(next_state)
         answer_story(bot)
     else:

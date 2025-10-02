@@ -99,20 +99,23 @@ def on_state_update(user: User):
     for player in User.get_all_players(db_sess):
         text = player.get_name() + f" ({player.get_tagname()})\n"
         state = player.state
+        answer = ""
         match state:
             case "started": state = "Начало"
-            case "task1": state = "Утки"
-            case "task2": state = "Озон: Винницкая, 15"
-            case "task3": state = "Пожарник"
-            case "task4": state = "Сытый лис"
-            case "task5": state = "Шар на площади"
-            case "task6": state = "Камни у памятника"
-            case "task7": state = "Вкусно не точка"
-            case "task8": state = "Озон: Раменки, д.6 к.2"
-            case "task9": state = "Длинный дом"
-            case "task10": state = "Финальный код"
+            case "task1": state = "Утки"; answer = "7"
+            case "task2": state = "Озон: Винницкая, 15"; answer = "4"
+            case "task3": state = "Пожарник"; answer = "0101мкм"
+            case "task4": state = "Сытый лис"; answer = "8:00"
+            case "task5": state = "Шар на площади"; answer = "частичной"
+            case "task6": state = "Камни у памятника"; answer = "6"
+            case "task7": state = "Вкусно не точка"; answer = "20"
+            case "task8": state = "Озон: Раменки, д.6 к.2"; answer = "7"
+            case "task9": state = "Длинный дом"; answer = "1"
+            case "task10": state = "Финальный код"; answer = "471"
             case "quest_end": state = "Конец"
         text += f"Текущий этап: {state}"
+        if answer:
+            text += f"\nОтвет: {answer}"
         texts.append(text)
 
     text = "Положение дел:\n\n"
