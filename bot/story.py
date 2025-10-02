@@ -43,9 +43,9 @@ def started(bot: Bot, user: User):
         "Ищите как хотите и трепещите от страха\\! Ха\\-ха\\! 🤪",
     ]:
         bot.sendChatAction("typing")
-        st = len(text) * 0.015 - 0.5
+        st = len(text) * 0.02 - 0.25
         if st > 0:
-            sleep(len(text) * 0.015)
+            sleep(st)
         forward(bot.sendMessage(text, use_markdown=True))
     bot.sendChatAction("choose_sticker")
     sleep(1)
