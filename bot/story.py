@@ -72,7 +72,7 @@ def task1(bot: Bot, user: User):
 @story_part
 def task2(bot: Bot, user: User):
     task = """
-Он что\\-то подбросил в пункт Озона, заметил адрес: `Винницкая, 15`\\. Сказал сотрудниками какой\\-то пароль\\.
+Он что\\-то подбросил в пункт Озона, заметил адрес: `Винницкая, 15`\\. Сказал сотрудникам какой\\-то пароль\\.
 Пароль зашифрован:
 ```
 А \\- 1
@@ -90,7 +90,7 @@ def task2(bot: Bot, user: User):
 @story_part
 def task3(bot: Bot, user: User):
     task = "Вижу памятник какому-то спасателю, рядом его машина. Он записал номер машины. Наверное, и вам пригодится."
-    answers = lambda ans: ans.replace(" ", "").replace("k", "к").replace("m", "м") == "0101мкм"
+    answers = lambda ans: ans.replace(" ", "").replace("-", "").replace(".", "").replace("k", "к").replace("m", "м") == "0101мкм"
     ok_phrase = ["Вижу, вы нашли то, что надо", "А я ведь тоже шел на день рождения. Но меня поймал Грифер и держит у себя взаперти."]
     run_task(bot, user, task, answers, ok_phrase, "task4")
 
