@@ -10,10 +10,7 @@ ME = tgapi.MessageEntity
 
 
 @Bot.add_command()
-@Bot.cmd_connect_db
 def start(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
-    assert bot.db_sess
-    assert bot.user
     if len(args) < 1 or args[0] != "verySecretStartCode":
         if not bot.user.state:
             bot.user.set_state("banned")
@@ -25,9 +22,7 @@ def start(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
 
 
 @Bot.add_command()
-@Bot.cmd_connect_db
 def start_quest(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
-    assert bot.user
     if bot.user.state != "started":
         return
     bot.user.set_state("task1")
@@ -35,9 +30,7 @@ def start_quest(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
 
 
 @Bot.add_command()
-@Bot.cmd_connect_db
 def task_hint(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
-    assert bot.user
     hint = ""
     hintI = ""
     match bot.user.state:

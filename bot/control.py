@@ -11,17 +11,12 @@ ME = tgapi.MessageEntity
 
 
 @Bot.add_command()
-@Bot.cmd_connect_db
 def clear_state(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
-    assert bot.user
     bot.user.set_state("")
 
 
 @Bot.add_command()
-@Bot.cmd_connect_db
 def set_state(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
-    assert bot.db_sess
-    assert bot.user
     if not bot.user.is_admin():
         return
     if len(args) == 0:
@@ -46,11 +41,8 @@ def set_state(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
 
 
 @Bot.add_command()
-@Bot.cmd_connect_db
 @Bot.cmd_for_admin
 def set_control(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
-    assert bot.db_sess
-    assert bot.user
     assert bot.message
     if not bot.user.is_admin():
         return
@@ -59,11 +51,8 @@ def set_control(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
 
 
 @Bot.add_command()
-@Bot.cmd_connect_db
 @Bot.cmd_for_admin
 def set_broadcast(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
-    assert bot.db_sess
-    assert bot.user
     assert bot.message
     if not bot.user.is_admin():
         return
@@ -78,8 +67,8 @@ def forward(r: tuple[bool, tgapi.Message]):
             config = Config.get(db_sess)
             if not config.broadcast_chat_id:
                 return
-            tgapi.forwardMessage(config.broadcast_chat_id, config.broadcast_chat_thread_id,
-                                 msg.chat.id, msg.message_id, disable_notification=True)
+            tgapi.call_async(tgapi.forwardMessage, config.broadcast_chat_id, config.broadcast_chat_thread_id,
+                             msg.chat.id, msg.message_id, disable_notification=True)
 
 
 def send_as_bot(db_sess: Session, msg: tgapi.Message):
@@ -95,15 +84,14 @@ def send_as_bot(db_sess: Session, msg: tgapi.Message):
         if ok and msg_id is None:
             msg_id = msgid
             msg_chat_id = player.id_tg
-    tgapi.deleteMessage(msg.chat.id, msg.message_id)
+    tgapi.call_async(tgapi.deleteMessage, msg.chat.id, msg.message_id)
     if msg_id and msg_chat_id:
-        tgapi.forwardMessage(config.broadcast_chat_id, config.broadcast_chat_thread_id,
-                             msg_chat_id, msg_id.message_id, disable_notification=True)
+        tgapi.call_async(tgapi.forwardMessage, config.broadcast_chat_id, config.broadcast_chat_thread_id,
+                         msg_chat_id, msg_id.message_id, disable_notification=True)
 
 
 def on_state_update(user: User):
-    db_sess = Session.object_session(user)
-    assert db_sess
+    db_sess = user.db_sess
     config = Config.get(db_sess)
     if not config.control_chat_id:
         return
@@ -129,4 +117,4 @@ def on_state_update(user: User):
 
     text = "Положение дел:\n\n"
     text += "\n----------\n".join(texts)
-    tgapi.sendMessage(config.control_chat_id, text, config.control_chat_thread_id)
+    tgapi.call_async(tgapi.sendMessage, config.control_chat_id, text, config.control_chat_thread_id)

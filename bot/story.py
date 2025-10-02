@@ -15,8 +15,6 @@ _story_parts: dict[str, tfn] = {}
 
 
 def answer_story(bot: Bot):
-    assert bot.db_sess
-    assert bot.user
     fn = _story_parts.get(bot.user.state)
     if fn:
         fn(bot, bot.user)
@@ -52,7 +50,7 @@ def started(bot: Bot, user: User):
     bot.sendChatAction("choose_sticker")
     sleep(1)
     forward(bot.sendSticker("CAACAgEAAxUAAWjZGdMrUNNR5rRbAsVXv_X_xpZ-AAKCAgAC1jEpR2is5WGi39g8NgQ"))
-    sleep(10)
+    sleep(15)
     bot.sendChatAction("typing")
     sleep(5)
     bot.sendChatAction("typing")

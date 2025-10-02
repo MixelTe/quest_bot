@@ -8,13 +8,10 @@ class Bot(tgapi.BotWithDB[User]):
 
 
 @Bot.on_message
-@Bot.connect_db
 def on_message(bot: Bot):
     from bot.control import forward, send_as_bot
     from bot.story import answer_story
     assert bot.message
-    assert bot.db_sess
-    assert bot.user
     if bot.message.chat.type != "private":
         send_as_bot(bot.db_sess, bot.message)
         return
