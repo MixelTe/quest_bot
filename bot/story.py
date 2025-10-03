@@ -9,7 +9,6 @@ from bot.control import forward
 from data.user import User
 from utils import clear_input, reply_markup
 
-ME = tgapi.MessageEntity
 type tfn = Callable[[Bot, User], None]
 _story_parts: dict[str, tfn] = {}
 
@@ -203,10 +202,10 @@ def run_task(bot: Bot, user: User, task: str, answers: tuple[str, ...] | Callabl
 
 
 def send_backvoice(bot: Bot):
-    p1 = "Голос свыше:\n"
-    p2 = "Убедись, что твои друзья рядом и слышат тебя."
-    msg = p1 + p2
-    forward(bot.sendMessage(msg, entities=[ME.italic(0, ME.len(p1)), ME.blockquote(ME.len(p1), ME.len(p2))]))
+    msg = tgapi.build_msg()
+    msg.italic("Голос свыше:\n")
+    msg.blockquote("Убедись, что твои друзья рядом и слышат тебя.")
+    forward(bot.sendMessage(msg))
 
 
 def send_you_are_wrong(bot: Bot):

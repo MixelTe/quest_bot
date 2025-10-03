@@ -6,8 +6,6 @@ from bot.control import forward
 from bot.story import answer_story
 from utils import reply_markup
 
-ME = tgapi.MessageEntity
-
 
 @Bot.add_command()
 def start(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
@@ -42,15 +40,14 @@ def task_hint(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
             if len(args) > 0 and args[0] == "1":
                 sendPhoto(bot, "task3_hint.jpg", "Подсказка 2")
             else:
-                p1 = "Подсказка 1:\n"
-                p2 = """
+                msg = tgapi.build_msg("Подсказка 1:\n")
+                msg.blockquote("""
 В брезентовой куртке и каске,
 Забыв про кольчужную бронь,
 Решительно и без опаски
 Бросается рыцарь в огонь!
-""".strip()
-                txt = p1 + p2
-                forward(bot.sendMessage(txt, entities=[ME.blockquote(ME.len(p1), ME.len(p2))]))
+""".strip())
+                forward(bot.sendMessage(msg))
                 edit_hint_btns(bot, 2)
         case "task4":
             sendPhoto(bot, "task4_hint.jpg", "Подсказка")
@@ -85,7 +82,7 @@ def edit_hint_btns(bot: Bot, count: int):
 
 
 def sendPhoto(bot: Bot, fname: str, caption: str):
-    ok, r = bot.sendPhoto(tgapi.url_for("img.img", fname=fname), caption=caption)
+    ok, r = bot.sendPhoto(tgapi.url_for("img.img", fname=fname, _double_slash=False), caption=caption)
     if not ok:
-        ok, r = bot.sendPhoto(tgapi.url_for("img.img", fname=fname, _double_slash=False), caption=caption)
+        ok, r = bot.sendPhoto(tgapi.url_for("img.img", fname=fname, _double_slash=True), caption=caption)
     forward((ok, r))

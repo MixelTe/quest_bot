@@ -7,8 +7,6 @@ from data.config import Config
 from data.user import User
 from utils import reply_markup
 
-ME = tgapi.MessageEntity
-
 
 @Bot.add_command()
 def clear_state(bot: Bot, args: tgapi.BotCmdArgs, **_: str):
